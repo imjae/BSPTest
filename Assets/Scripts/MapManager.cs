@@ -39,7 +39,7 @@ public class MapManager : MonoBehaviour
         int dx = 0;
         int dy = 0;
 
-        TileArray = new Tile[width, height];
+        TileArray = new Tile[height, width];
 
         int halfWidth = Mathf.RoundToInt(width * 0.5f);
         int halfHeight = Mathf.RoundToInt(height * 0.5f);
@@ -51,6 +51,7 @@ public class MapManager : MonoBehaviour
                 Vector2 tmpCoordinate = new Vector2(dx, dy);
                 var tileObject = tileManager.Create(tileManager.transform, new Vector2(x, y), Color.white);
                 tileObject.Coordinate = new Vector2(dx, dy);
+                tileObject.name = $"Tile({tileObject.Coordinate.x}.{tileObject.Coordinate.y})";
 
                 TileArray[dx, dy] = tileObject;
                 dy += 1;

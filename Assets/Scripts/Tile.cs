@@ -18,8 +18,6 @@ public class Tile : MonoBehaviour
         get => spriteRenderer.color;
     }
 
-
-
     public int sortingOrder
     {
         set => spriteRenderer.sortingOrder = value;

@@ -196,8 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450be219dfd81d14b8772b57262382c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
+  width: 200
+  height: 150
   tileManager: {fileID: 2124741967}
   tileResource: {fileID: 4391378522864355753, guid: e83e83cec635620419bdc67fca1d15c9, type: 3}
 --- !u!4 &113050398
