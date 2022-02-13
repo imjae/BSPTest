@@ -1,51 +1,62 @@
+using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class MapManager : MonoBehaviour
 {
     #region Fields
-    private Vector2 _size;
+
+    [Header("Map Settings")]
+    public int width;
+    public int height;
     private Tile[,] _tileArray;
+
+    [Header("Tile References")]
+    public TileManager tileManager;
+    public Tile tileResource;
     #endregion
 
     #region Properties
-    public Tile tileResource;
-    public int Width { get; set; }
-    public int Height { get; set; }
     public Tile[,] TileArray
     {
         get => _tileArray;
         set { _tileArray = value; }
     }
-    public Vector2 Size
+    #endregion
+
+    #region Unity Life Cycles ()
+    void Awake()
     {
-        set
-        {
-            _size = value;
-            Width = (int)value.x;
-            Height = (int)value.y;
-        }
-        get => _size;
+        InitializeTiles();
     }
     #endregion
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-        TileArray = new Tile[Width, Height];
-        for (int i = 0; i < Width; i++)
-        {
-            for (int j = 0; j < Height; j++)
-            {
-                // TileArray = Instan
-            }
-        }
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void InitializeTiles()
     {
+        int dx = 0;
+        int dy = 0;
+
+        TileArray = new Tile[width, height];
+
+        int halfWidth = Mathf.RoundToInt(width * 0.5f);
+        int halfHeight = Mathf.RoundToInt(height * 0.5f);
+
+        for (int y = -halfHeight; y < halfHeight; y++)
+        {
+            for (int x = -halfWidth; x < halfWidth; x++)
+            {
+                Vector2 tmpCoordinate = new Vector2(dx, dy);
+                var tileObject = tileManager.Create(tileManager.transform, new Vector2(x, y), Color.white);
+                tileObject.Coordinate = new Vector2(dx, dy);
+
+                TileArray[dx, dy++] = tileObject;
+            }
+            dx += 1;
+        }
+
 
     }
 }

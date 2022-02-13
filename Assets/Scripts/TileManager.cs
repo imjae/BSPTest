@@ -5,10 +5,14 @@ using UnityEngine;
 public class TileManager : MonoBehaviour
 {
     #region Fields
-    [SerializeField] Tile tilePrefab;
+    [SerializeField] private Tile tilePrefab;
+    public int tileWidth;
+    public int tileHeight;
     #endregion
 
-    Tile Create(Transform parent, Vector2 position, Color color, int order = 1)
+
+
+    public Tile Create(Transform parent, Vector2 position, Color color, int order = 1)
     {
         Tile result = default(Tile);
 
@@ -18,10 +22,13 @@ public class TileManager : MonoBehaviour
 
         if (result.TryGetComponent<Tile>(out Tile tile))
         {
+            tile.type = Tile.Type.GROUND;
             tile.color = color;
             tile.sortingOrder = order;
         }
 
         return result;
     }
+
+    // 타일 렌더러 변경
 }

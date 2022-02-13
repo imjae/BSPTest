@@ -11,13 +11,14 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region Properties
-    public Vector2 Size { get; set; }
     public Vector2 Coordinate { get; set; }
     public Color color
     {
         set => spriteRenderer.color = value;
         get => spriteRenderer.color;
     }
+
+
 
     public int sortingOrder
     {
@@ -42,8 +43,7 @@ public class Tile : MonoBehaviour
         WALL,
         WAY,
         WATER,
-        LAVA,
-
+        LAVA
     }
     #endregion
 
@@ -52,7 +52,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        if (TryGetComponent<SpriteRenderer>(out spriteRenderer))
+        if (!TryGetComponent<SpriteRenderer>(out spriteRenderer))
         {
             Debug.LogError("You need to SpriteRenderer for Block");
         }
