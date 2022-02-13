@@ -52,8 +52,10 @@ public class MapManager : MonoBehaviour
                 var tileObject = tileManager.Create(tileManager.transform, new Vector2(x, y), Color.white);
                 tileObject.Coordinate = new Vector2(dx, dy);
 
-                TileArray[dx, dy++] = tileObject;
+                TileArray[dx, dy] = tileObject;
+                dy += 1;
             }
+            dy = 0;
             dx += 1;
         }
 

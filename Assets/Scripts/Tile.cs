@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
     #endregion
 
     #region Properties
-    public Vector2 Coordinate { get; set; }
+    [field: SerializeField] public Vector2 Coordinate { get; set; }
     public Color color
     {
         set => spriteRenderer.color = value;
@@ -56,5 +56,10 @@ public class Tile : MonoBehaviour
         {
             Debug.LogError("You need to SpriteRenderer for Block");
         }
+    }
+
+    void OnMouseDown()
+    {
+        Debug.Log("click!");
     }
 }
