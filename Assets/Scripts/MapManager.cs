@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class MapManager : MonoBehaviour
+public class MapManager : Singleton<MapManager>
 {
     #region Fields
-
     [Header("Map Settings")]
     public int width;
     public int height;
@@ -27,10 +26,7 @@ public class MapManager : MonoBehaviour
     #endregion
 
     #region Unity Life Cycles ()
-    void Awake()
-    {
-        InitializeTiles();
-    }
+    
     #endregion
 
 
@@ -59,7 +55,5 @@ public class MapManager : MonoBehaviour
             dy = 0;
             dx += 1;
         }
-
-
     }
 }
