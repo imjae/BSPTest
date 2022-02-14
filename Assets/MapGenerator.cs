@@ -73,6 +73,7 @@ public class TreeNode
     public void Paint()
     {
         this.self.PaintWall(MapManager.Instance.TileArray);
+
         if (this.leftChild != null)
             this.leftChild.Paint();
         if (this.rightChild != null)
@@ -100,14 +101,14 @@ public class Container
     public void PaintWall(Tile[,] tileArray)
     {
         bool isPainting = false;
-        for (int i = x; i < w; i++)
+        for (int i = x; i < x + w; i++)
         {
-            for (int j = y; j < h; j++)
+            for (int j = y; j < y + h; j++)
             {
                 if (i == x) isPainting = true;
-                else if (i == w - 1) isPainting = true;
+                else if (i == x + w - 1) isPainting = true;
                 else if (j == y) isPainting = true;
-                else if (j == h - 1) isPainting = true;
+                else if (j == y + h - 1) isPainting = true;
 
                 if (isPainting)
                     tileArray[i, j].color = Color.gray;
@@ -120,7 +121,7 @@ public class Container
     public TreeNode SplitContainer(Container container, int count, float widthRatio, float heightRatio)
     {
         TreeNode root = new TreeNode(container);
-        if (count != 0)
+        if (count > 0)
         {
             Container[] sr = RandomSplit(container, widthRatio, heightRatio);
             root.leftChild = SplitContainer(sr[0], count - 1, widthRatio, heightRatio);
@@ -139,16 +140,18 @@ public class Container
         if (randomNumber == 0)
         {
             // 난수가 0 이면 수직 분할
-            int tmp_r1_witdh = Random.Range(1, container.w + 1);
+            int tmp_r1_witdh = Random.Range(2, container.w);
             float r1_width_ratio = (float)tmp_r1_witdh / (float)container.h;
             float r2_width_ratio = (float)(container.w - tmp_r1_witdh) / (float)container.h;
 
-            while (!(r1_width_ratio >= widthRatio && r2_width_ratio >= widthRatio))
-            {
-                tmp_r1_witdh = Random.Range(1, container.w + 1);
-                r1_width_ratio = (float)tmp_r1_witdh / (float)container.h;
-                r2_width_ratio = (float)(container.w - tmp_r1_witdh) / (float)container.h;
-            }
+            // while (!(r1_width_ratio >= widthRatio && r2_width_ratio >= widthRatio))
+            // {
+            //     tmp_r1_witdh = Random.Range(2, container.w);
+            //     r1_width_ratio = (float)tmp_r1_witdh / (float)container.h;
+            //     r2_width_ratio = (float)(container.w - tmp_r1_witdh) / (float)container.h;
+            // }
+
+            Debug.Log($"R1 WIDTH : {r1_width_ratio} / R2 : {r2_width_ratio}");
 
             r1 = new Container(
                 container.x, container.y,
@@ -158,20 +161,24 @@ public class Container
                 container.x + r1.w, container.y,
                 container.w - r1.w, container.h
             );
+
+            if(r1_width_ratio < widthRatio || r2_width_ratio < widthRatio)
+                return RandomSplit(container, widthRatio, heightRatio);
         }
         else
         {
             // 난수가 0이 아니면 수평 분할
-            int tmp_r1_height = Random.Range(1, container.h + 1);
+            int tmp_r1_height = Random.Range(2, container.h);
             float r1_height_ratio = (float)tmp_r1_height / (float)container.w;
-            float r2_height_ratio = (float)(container.h - r1_height_ratio) / (float)container.w;
+            float r2_height_ratio = (float)(container.h - tmp_r1_height) / (float)container.w;
 
-            while (!(r1_height_ratio >= heightRatio && r2_height_ratio >= heightRatio))
-            {
-                tmp_r1_height = Random.Range(1, container.h + 1);
-                r1_height_ratio = (float)tmp_r1_height / (float)container.w;
-                r2_height_ratio = (float)(container.h - r1_height_ratio) / (float)container.w;
-            }
+            // while (!(r1_height_ratio >= heightRatio && r2_height_ratio >= heightRatio))
+            // {
+            //     tmp_r1_height = Random.Range(2, container.h);
+            //     r1_height_ratio = (float)tmp_r1_height / (float)container.w;
+            //     r2_height_ratio = (float)(container.h - tmp_r1_height) / (float)container.w;
+            // }
+            Debug.Log($"R1 HEIGHT : {r1_height_ratio} / R2 : {r2_height_ratio}");
 
             r1 = new Container(
                 container.x, container.y,
@@ -181,6 +188,10 @@ public class Container
                 container.x, container.y + r1.h,
                 container.w, container.h - r1.h
             );
+
+            
+            if(r1_height_ratio < heightRatio || r2_height_ratio < heightRatio)
+                return RandomSplit(container, widthRatio, heightRatio);
         }
 
         result[0] = r1;

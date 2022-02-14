@@ -459,11 +459,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 113050397}
-  width: 30
-  height: 30
-  iterationNumber: 1
-  widthRatio: 0.45
-  heightRatio: 0.45
+  width: 100
+  height: 100
+  iterationNumber: 5
+  widthRatio: 0.35
+  heightRatio: 0.35
 --- !u!1 &2124741965
 GameObject:
   m_ObjectHideFlags: 0
