@@ -122,6 +122,19 @@ public class Container
         }
     }
 
+    public void PaintWay(Tile[,] tileArray)
+    {
+        for (int i = x; i < x + w; i++)
+        {
+            for (int j = y; j < y + h; j++)
+            {
+                
+                tileArray[i, j].color = Color.gray;
+
+            }
+        }
+    }
+
     public TreeNode SplitContainer(Container container, int count, float widthRatio, float heightRatio)
     {
         TreeNode root = new TreeNode(container);
@@ -209,6 +222,7 @@ public class Room
             for (int j = y; j < y + h; j++)
             {
                 tileArray[i, j].color = Color.cyan;
+                tileArray[i, j].type = Tile.Type.GROUND;
             }
         }
     }
