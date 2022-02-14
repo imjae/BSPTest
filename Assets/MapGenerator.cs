@@ -32,6 +32,10 @@ public class MapGenerator : MonoBehaviour
         TreeNode containerTree = mainContainer.SplitContainer(mainContainer, iterationNumber, widthRatio, heightRatio);
 
         containerTree.Paint();
+
+        containerTree.GetLeafs().ForEach(node => {
+            new Room(node).PaintGround(MapManager.Instance.TileArray);
+        });
     }
 
     // Update is called once per frame
@@ -56,7 +60,7 @@ public class TreeNode
 
     public List<Container> GetLeafs()
     {
-        List<Container> result = default(List<Container>);
+        List<Container> result = new List<Container>();
 
         if (this.leftChild == null && this.rightChild == null)
         {
@@ -64,8 +68,8 @@ public class TreeNode
         }
         else
         {
-            result.AddRange(this.leftChild.GetLeafs());
-            result.AddRange(this.leftChild.GetLeafs());
+            result.AddRange(this.leftChild?.GetLeafs());
+            result.AddRange(this.rightChild?.GetLeafs());
         }
         return result;
     }
@@ -82,8 +86,8 @@ public class TreeNode
 }
 public class Container
 {
-    private int x, y, w, h;
-    private Vector2 center;
+    public int x, y, w, h;
+    public Vector2 center;
 
     public Container(int x, int y, int w, int h)
     {
@@ -144,15 +148,6 @@ public class Container
             float r1_width_ratio = (float)tmp_r1_witdh / (float)container.h;
             float r2_width_ratio = (float)(container.w - tmp_r1_witdh) / (float)container.h;
 
-            // while (!(r1_width_ratio >= widthRatio && r2_width_ratio >= widthRatio))
-            // {
-            //     tmp_r1_witdh = Random.Range(2, container.w);
-            //     r1_width_ratio = (float)tmp_r1_witdh / (float)container.h;
-            //     r2_width_ratio = (float)(container.w - tmp_r1_witdh) / (float)container.h;
-            // }
-
-            Debug.Log($"R1 WIDTH : {r1_width_ratio} / R2 : {r2_width_ratio}");
-
             r1 = new Container(
                 container.x, container.y,
                 tmp_r1_witdh, container.h
@@ -162,7 +157,7 @@ public class Container
                 container.w - r1.w, container.h
             );
 
-            if(r1_width_ratio < widthRatio || r2_width_ratio < widthRatio)
+            if (r1_width_ratio < widthRatio || r2_width_ratio < widthRatio)
                 return RandomSplit(container, widthRatio, heightRatio);
         }
         else
@@ -171,14 +166,6 @@ public class Container
             int tmp_r1_height = Random.Range(2, container.h);
             float r1_height_ratio = (float)tmp_r1_height / (float)container.w;
             float r2_height_ratio = (float)(container.h - tmp_r1_height) / (float)container.w;
-
-            // while (!(r1_height_ratio >= heightRatio && r2_height_ratio >= heightRatio))
-            // {
-            //     tmp_r1_height = Random.Range(2, container.h);
-            //     r1_height_ratio = (float)tmp_r1_height / (float)container.w;
-            //     r2_height_ratio = (float)(container.h - tmp_r1_height) / (float)container.w;
-            // }
-            Debug.Log($"R1 HEIGHT : {r1_height_ratio} / R2 : {r2_height_ratio}");
 
             r1 = new Container(
                 container.x, container.y,
@@ -189,8 +176,8 @@ public class Container
                 container.w, container.h - r1.h
             );
 
-            
-            if(r1_height_ratio < heightRatio || r2_height_ratio < heightRatio)
+
+            if (r1_height_ratio < heightRatio || r2_height_ratio < heightRatio)
                 return RandomSplit(container, widthRatio, heightRatio);
         }
 
@@ -198,5 +185,31 @@ public class Container
         result[1] = r2;
 
         return result;
+    }
+}
+
+public class Room
+{
+    private int x, y, w, h;
+
+    public Room(Container container)
+    {
+        this.x = container.x + Random.Range(0, container.w / 3);
+        this.y = container.y + Random.Range(0, container.h / 3);
+        this.w = container.w - (this.x - container.x);
+        this.h = container.h - (this.y - container.y);
+        this.w -= Random.Range(0, this.w / 3);
+        this.h -= Random.Range(0, this.h / 3);
+    }
+
+    public void PaintGround(Tile[,] tileArray)
+    {
+        for (int i = x; i < x + w; i++)
+        {
+            for (int j = y; j < y + h; j++)
+            {
+                tileArray[i, j].color = Color.cyan;
+            }
+        }
     }
 }

@@ -461,7 +461,7 @@ MonoBehaviour:
   manager: {fileID: 113050397}
   width: 100
   height: 100
-  iterationNumber: 5
+  iterationNumber: 4
   widthRatio: 0.35
   heightRatio: 0.35
 --- !u!1 &2124741965
