@@ -31,9 +31,11 @@ public class MapGenerator : MonoBehaviour
         Container mainContainer = new Container(0, 0, width, height);
         TreeNode containerTree = mainContainer.SplitContainer(mainContainer, iterationNumber, widthRatio, heightRatio);
 
-        containerTree.Paint();
+        // containerTree.Paint();
+        containerTree.PaintWay();
 
-        containerTree.GetLeafs().ForEach(node => {
+        containerTree.GetLeafs().ForEach(node =>
+        {
             new Room(node).PaintGround(MapManager.Instance.TileArray);
         });
     }
@@ -83,6 +85,39 @@ public class TreeNode
         if (this.rightChild != null)
             this.rightChild.Paint();
     }
+
+    public void PaintWay()
+    {
+        if (this.leftChild == null || this.rightChild == null)
+            return;
+
+        int left_x = Mathf.RoundToInt(this.leftChild.self.center.x);
+        int left_y = Mathf.RoundToInt(this.leftChild.self.center.y);
+        int right_x = Mathf.RoundToInt(this.rightChild.self.center.x);
+        int right_y = Mathf.RoundToInt(this.rightChild.self.center.y);
+
+        if (left_x == right_x)
+        {
+            // 수평 분할 된 자식
+            for (int i = left_y; i < right_y; i++)
+            {
+                MapManager.Instance.TileArray[left_x, i].color = Color.cyan;
+                MapManager.Instance.TileArray[left_x, i].type = Tile.Type.WAY;
+            }
+        }
+        else if (left_y == right_y)
+        {
+            // 수직 분할 된 자식
+            for (int i = left_x; i < right_x; i++)
+            {
+                MapManager.Instance.TileArray[i, left_y].color = Color.cyan;
+                MapManager.Instance.TileArray[left_x, i].type = Tile.Type.WAY;
+            }
+        }
+
+        this.leftChild.PaintWay();
+        this.rightChild.PaintWay();
+    }
 }
 public class Container
 {
@@ -118,19 +153,6 @@ public class Container
                     tileArray[i, j].color = Color.gray;
 
                 isPainting = false;
-            }
-        }
-    }
-
-    public void PaintWay(Tile[,] tileArray)
-    {
-        for (int i = x; i < x + w; i++)
-        {
-            for (int j = y; j < y + h; j++)
-            {
-                
-                tileArray[i, j].color = Color.gray;
-
             }
         }
     }
@@ -207,12 +229,12 @@ public class Room
 
     public Room(Container container)
     {
-        this.x = container.x + Random.Range(0, container.w / 3);
-        this.y = container.y + Random.Range(0, container.h / 3);
+        this.x = container.x + Random.Range(1, container.w / 3);
+        this.y = container.y + Random.Range(1, container.h / 3);
         this.w = container.w - (this.x - container.x);
         this.h = container.h - (this.y - container.y);
-        this.w -= Random.Range(0, this.w / 3);
-        this.h -= Random.Range(0, this.h / 3);
+        this.w -= Random.Range(1, this.w / 3);
+        this.h -= Random.Range(1, this.h / 3);
     }
 
     public void PaintGround(Tile[,] tileArray)
